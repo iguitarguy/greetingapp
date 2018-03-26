@@ -28,6 +28,10 @@ public class GreetingDao {
         return;
     }
 
+    public Greeting update(Greeting greeting) {
+        return entityManager.merge(greeting);
+    }
+
     //Return the greeting with the passed-in id.
     public Greeting getById(int id) {
         return entityManager.find(Greeting.class, id);

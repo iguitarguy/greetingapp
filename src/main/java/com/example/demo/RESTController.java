@@ -65,20 +65,25 @@ public class RESTController {
         return entity;
     }
 
+//    @RequestMapping(value = "/updateGreeting", method = RequestMethod.PUT)
+//    public Greeting updateGreeting(@RequestBody String newMessage) throws IOException {
+//        ObjectMapper mapper = new ObjectMapper();
+//
+//        String message = FileUtils.readFileToString(new File("./message.txt"), StandardCharsets.UTF_8.name());
+//
+//        Greeting greeting = mapper.readValue(message, Greeting.class);
+//
+//        greeting.setContent(newMessage);
+//
+//        mapper.writeValue(new File("./message.txt"), greeting);
+//
+//        return greeting;
+//
+//    }
+
     @RequestMapping(value = "/updateGreeting", method = RequestMethod.PUT)
-    public Greeting updateGreeting(@RequestBody String newMessage) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-
-        String message = FileUtils.readFileToString(new File("./message.txt"), StandardCharsets.UTF_8.name());
-
-        Greeting greeting = mapper.readValue(message, Greeting.class);
-
-        greeting.setContent(newMessage);
-
-        mapper.writeValue(new File("./message.txt"), greeting);
-
-        return greeting;
-
+    public Greeting updateGreeting(@RequestBody Greeting newMessage) throws IOException {
+        return greetingDao.update(newMessage);
     }
 
 }
