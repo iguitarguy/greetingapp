@@ -23,16 +23,16 @@ public class GreetingDao {
     private EntityManager entityManager;
 
     //Insert greeting into the database.
-    public void create(Greeting greeting) {
+    public String create(Greeting greeting) {
         if (entityManager.find(Greeting.class, greeting.getId()) == null) {
-            System.out.println("Successfully created greeting.");
+            entityManager.persist(greeting);
+            return greeting.toString();
         }
         else
         {
-            throw new IllegalArgumentException("Id already exists");
+            return "Id already exists";
         }
-        entityManager.persist(greeting);
-        return;
+
     }
 
     //Update greeting into the database;
