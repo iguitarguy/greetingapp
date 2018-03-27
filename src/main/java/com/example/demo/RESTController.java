@@ -23,8 +23,9 @@ public class RESTController {
     private GreetingDao greetingDao;
 
     @RequestMapping(value = "/createGreeting", method = RequestMethod.POST)
-    public String createGreeting(@RequestBody Greeting g) throws IOException {
-        return greetingDao.create(g);
+    public Greeting createGreeting(@RequestBody Greeting g) throws IOException {
+        greetingDao.create(g);
+        return g;
     }
 
     @RequestMapping(value = "/getGreeting/{id}", method = RequestMethod.GET)
