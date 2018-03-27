@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -85,6 +84,7 @@ public class RESTController {
     public Greeting updateGreeting(@RequestBody Greeting newMessage) throws IOException {
         return greetingDao.update(newMessage);
     }
+
     @RequestMapping(value = "/deleteGreeting/{id}", method = RequestMethod.DELETE)
     public String deleteGreeting(@PathVariable("id") int id) throws IOException {
         return greetingDao.delete(id);
