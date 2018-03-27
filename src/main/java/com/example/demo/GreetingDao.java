@@ -28,8 +28,27 @@ public class GreetingDao {
         return;
     }
 
+    //Update greeting into the database;
     public Greeting update(Greeting greeting) {
-        return entityManager.merge(greeting);
+        if (entityManager.find(Greeting.class, greeting.getId()) == null) {
+            throw new IllegalArgumentException("Unknown Employee id");
+        }
+        else {
+            Greeting temp = entityManager.find(Greeting.class, greeting.getId());
+            return entityManager.merge(temp);
+        }
+    }
+
+    //Delete greeting from the database;
+    public String delete(int id) {
+        if (entityManager.find(Greeting.class, id) == null) {
+            throw new IllegalArgumentException("Unknown Employee id");
+        }
+        else {
+            Greeting temp = entityManager.find(Greeting.class, id);
+            entityManager.remove(temp);
+            return "Removed Greeting " + id + " successfully.";
+        }
     }
 
     //Return the greeting with the passed-in id.

@@ -85,5 +85,9 @@ public class RESTController {
     public Greeting updateGreeting(@RequestBody Greeting newMessage) throws IOException {
         return greetingDao.update(newMessage);
     }
+    @RequestMapping(value = "/deleteGreeting", method = RequestMethod.DELETE)
+    public String deleteGreeting(@RequestBody int id) throws IOException {
+        return greetingDao.delete(id);
+    }
 
 }
