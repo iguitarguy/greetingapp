@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.CharEncoding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,82 +13,45 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
 public class RESTController {
 
+    private static File file1 = new File("./inventory.txt");
+
     private int count = 1;
 
     @Autowired
-    private GreetingDao greetingDao;
+    private VehicleDao VehicleDao;
 
-    @RequestMapping(value = "/createGreeting", method = RequestMethod.POST)
-    public Greeting createGreeting(@RequestBody Greeting g) throws IOException {
-        greetingDao.create(g);
-        return g;
+    @RequestMapping(value = "/addVehicle", method = RequestMethod.POST)
+    public Vehicle createVehicle(@RequestBody Vehicle v) throws IOException {
+        VehicleDao.create(v);
+        return v;
     }
 
-    @RequestMapping(value = "/getGreeting/{id}", method = RequestMethod.GET)
-    public Greeting getGreeting(@PathVariable("id") int id) throws IOException {
-        return greetingDao.getById(id);
+    @RequestMapping(value = "/getLatestVehicles", method = RequestMethod.GET)
+    public List getLatestVehicles() throws IOException {
+       return VehicleDao.getLatest();
     }
 
-
-    @RequestMapping(value = "/greeting", method = RequestMethod.GET)
-    public Greeting greeting() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(new File("./message.txt"), Greeting.class);
+    @RequestMapping(value = "/getVehicle/{id}", method = RequestMethod.GET)
+    public Vehicle getVehicle(@PathVariable("id") int id) throws IOException {
+        return VehicleDao.getById(id);
     }
 
-    @RequestMapping(value = "/createGreeting1", method = RequestMethod.POST)
-    public Greeting createGreeting1(@RequestBody String content) throws IOException {
-        Greeting newGreeting = new Greeting(count++, content);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(new File("./message.txt"), newGreeting);
-        return newGreeting;
+    @RequestMapping(value = "/updateVehicle", method = RequestMethod.PUT)
+    public Vehicle updateVehicle(@RequestBody Vehicle newVehicle) throws IOException {
+        return VehicleDao.update(newVehicle);
     }
 
-    @RequestMapping(value = "/createGreeting3", method = RequestMethod.POST)
-    public ResponseEntity<Void> createGreeting3(@RequestBody String content)
-            throws IOException, URISyntaxException {
-        //create new greeting...
-
-        //should not be hardcoded! Only an example...
-        final URI location = new URI("http://localhost:8080/greeting/123");
-
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(location);
-
-        final ResponseEntity<Void> entity = new ResponseEntity<Void>(headers,
-                HttpStatus.CREATED);
-        return entity;
+    @RequestMapping(value = "/deleteVehicle/{id}", method = RequestMethod.DELETE)
+    public String deleteVehicle(@PathVariable("id") int id) throws IOException {
+        return VehicleDao.delete(id);
     }
 
-//    @RequestMapping(value = "/updateGreeting", method = RequestMethod.PUT)
-//    public Greeting updateGreeting(@RequestBody String newMessage) throws IOException {
-//        ObjectMapper mapper = new ObjectMapper();
-//
-//        String message = FileUtils.readFileToString(new File("./message.txt"), StandardCharsets.UTF_8.name());
-//
-//        Greeting greeting = mapper.readValue(message, Greeting.class);
-//
-//        greeting.setContent(newMessage);
-//
-//        mapper.writeValue(new File("./message.txt"), greeting);
-//
-//        return greeting;
-//
-//    }
-
-    @RequestMapping(value = "/updateGreeting", method = RequestMethod.PUT)
-    public Greeting updateGreeting(@RequestBody Greeting newMessage) throws IOException {
-        return greetingDao.update(newMessage);
-    }
-
-    @RequestMapping(value = "/deleteGreeting/{id}", method = RequestMethod.DELETE)
-    public String deleteGreeting(@PathVariable("id") int id) throws IOException {
-        return greetingDao.delete(id);
-    }
 
 }
